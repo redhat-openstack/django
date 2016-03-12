@@ -9,9 +9,11 @@ from io import BytesIO
 from django.db import connection, connections, DEFAULT_DB_ALIAS
 from django.core import signals
 from django.core.exceptions import SuspiciousOperation
-from django.core.handlers.wsgi import WSGIRequest, LimitedStream
-from django.http import HttpRequest, HttpResponse, parse_cookie, build_request_repr, UnreadablePostError
-from django.test import SimpleTestCase, TransactionTestCase
+from django.http import (
+    HttpRequest, HttpResponse, RawPostDataException, UnreadablePostError,
+    parse_cookie,
+)
+from django.test import RequestFactory, SimpleTestCase, override_settings
 from django.test.client import FakePayload
 from django.test.utils import override_settings, str_prefix
 from django.utils import six
@@ -109,9 +111,6 @@ class RequestsTests(SimpleTestCase):
         # Regression for #19468
         request = WSGIRequest({'PATH_INFO': wsgi_str("/سلام/"), 'REQUEST_METHOD': 'get', 'wsgi.input': BytesIO(b'')})
         self.assertEqual(request.path, "/سلام/")
-
-    def test_parse_cookie(self):
-        self.assertEqual(parse_cookie('invalid@key=true'), {})
 
     def test_httprequest_location(self):
         request = HttpRequest()
