@@ -15,7 +15,7 @@ from django.http import (QueryDict, HttpResponse, HttpResponseRedirect,
                          SimpleCookie, BadHeaderError,
                          parse_cookie)
 from django.test import TestCase
-from django.utils.encoding import smart_str, force_text
+from django.utils.encoding import smart_str, force_text, force_str
 from django.utils.functional import lazy
 from django.utils._os import upath
 from django.utils import six

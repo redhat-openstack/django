@@ -264,6 +264,17 @@ def is_safe_url(url, host=None):
 
 
 def _is_safe_url(url, host):
+    """
+    Return ``True`` if the url is a safe redirection (i.e. it doesn't point to
+    a different host and uses a safe scheme).
+    Always returns ``False`` on an empty url.
+    """
+    if url is not None:
+        url = url.strip()
+    if not url:
+        return False
+    # Chrome treats \ completely as /
+    url = url.replace('\\', '/')
     # Chrome considers any URL with more than two slashes to be absolute, but
     # urlaprse is not so flexible. Treat any url with three slashes as unsafe.
     if url.startswith('///'):

@@ -12,9 +12,9 @@ from django.core.exceptions import SuspiciousOperation
 from django.core.handlers.wsgi import WSGIRequest, LimitedStream
 from django.http import (
     HttpRequest, HttpResponse, RawPostDataException, UnreadablePostError,
-    parse_cookie,
+    parse_cookie, build_request_repr,
 )
-from django.test import RequestFactory, SimpleTestCase, override_settings
+from django.test import RequestFactory, SimpleTestCase, TransactionTestCase
 from django.test.client import FakePayload
 from django.test.utils import override_settings, str_prefix
 from django.utils import six

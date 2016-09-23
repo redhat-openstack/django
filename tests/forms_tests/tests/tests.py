@@ -135,15 +135,6 @@ class ModelFormCallableModelDefault(TestCase):
 
 
 class FormsModelTestCase(TestCase):
-    def test_unicode_filename(self):
-        # FileModel with unicode filename and data #########################
-        f = FileForm(data={}, files={'file1': SimpleUploadedFile('我隻氣墊船裝滿晒鱔.txt', 'मेरी मँडराने वाली नाव सर्पमीनों से भरी ह'.encode('utf-8'))}, auto_id=False)
-        self.assertTrue(f.is_valid())
-        self.assertTrue('file1' in f.cleaned_data)
-        m = FileModel.objects.create(file=f.cleaned_data['file1'])
-        self.assertEqual(m.file.name, 'tests/\u6211\u96bb\u6c23\u588a\u8239\u88dd\u6eff\u6652\u9c54.txt')
-        m.delete()
-
     def test_boundary_conditions(self):
         # Boundary conditions on a PostitiveIntegerField #########################
         class BoundaryForm(ModelForm):
@@ -200,22 +191,6 @@ class FormsModelTestCase(TestCase):
         self.assertEqual(obj.def_date, datetime.date(1999, 3, 2))
 
 class RelatedModelFormTests(TestCase):
-    def test_invalid_loading_order(self):
-        """
-        Test for issue 10405
-        """
-        class A(models.Model):
-            ref = models.ForeignKey("B")
-
-        class Meta:
-            model = A
-            fields = '__all__'
-
-        self.assertRaises(ValueError, ModelFormMetaclass, str('Form'), (ModelForm,), {'Meta': Meta})
-
-        class B(models.Model):
-            pass
-
     def test_valid_loading_order(self):
         """
         Test for issue 10405
